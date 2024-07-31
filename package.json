@@ -3,7 +3,8 @@
     "@babel/core": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "babel-loader": "^9.1.3",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "start:backend": "python manage.py runserver",
