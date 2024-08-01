@@ -122,9 +122,6 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        # Log the email and URL being used for authentication (for debugging purposes)
-        print(f"Attempting to authenticate user: {email} using {auth_url}")
-
         # Supabase authentication request
         try:
             auth_response = requests.post(
@@ -274,7 +271,6 @@ def get_prediction(req):
         predicted_class = np.argmax(probabilities, axis=1)
         prediction_probability = float(probabilities[0][predicted_class[0]])
 
-        print(prediction_probability)
         # Map predictions back to original classes
         encoded_result = target_columns[predicted_class[0]]
 
@@ -546,7 +542,7 @@ def edit_feature(request):
         return JsonResponse({'auth': True}, status=403)
 
     req_data = json.loads(request.body)
-    print(req_data)
+
     table = req_data.get('feature')
     data_table = (table.lower())[:-1]
     main = req_data.get('main')
