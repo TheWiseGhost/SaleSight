@@ -3,27 +3,20 @@ import json
 import pickle
 import base64
 import pandas as pd
-import supabase
 import csv
 from supabase import create_client, Client
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import shap
 import numpy as np
 from .train_ai import AI
-from sklearn.preprocessing import LabelEncoder
 import traceback
 from datetime import datetime, timedelta, timezone
 from django.utils.crypto import get_random_string
 
 from django.conf import settings
-from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 import requests
-import jwt
 
 
 def validate_token(token):
