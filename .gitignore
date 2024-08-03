@@ -6,13 +6,14 @@ __pycache__/
 db.sqlite3
 /media
 /static
-
+.env
 *.log
 
 # Node.js/React
 node_modules/
 build/
 *.log
+*.env
 .DS_Store
 *.cache
 npm-debug.log*
@@ -30,8 +31,10 @@ yarn-error.log*
 
 # Python Virtual Environments
 venv/
+env/
 .venv/
-
+.env/
+.env
 
 # Coverage reports
 .coverage
