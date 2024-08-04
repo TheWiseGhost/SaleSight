@@ -49,7 +49,7 @@ const SandwichComparsion = () => {
       <div className="flex space-x-20">
         <button
           onClick={() => handleNavigation("/chooseplan")}
-          className="bg-mygreen font-abo-one hover:bg-lightgreen text-black px-8 py-4 rounded-xl"
+          className="bg-mygreen font-abo-one hover:bg-lightgreen text-black px-8 py-4 rounded-xl transition duration-200"
         >
           Sale Sight
         </button>
@@ -57,7 +57,7 @@ const SandwichComparsion = () => {
           onClick={() => {
             window.open("https://www.jimmyjohns.com/", "_blank");
           }}
-          className="bg-yellow-300 font-abo-one hover:bg-amber-200 text-black px-8 py-4 rounded-xl"
+          className="bg-yellow-300 font-abo-one hover:bg-amber-200 text-black px-8 py-4 rounded-xl transition duration-200"
         >
           Sandwich
         </button>
