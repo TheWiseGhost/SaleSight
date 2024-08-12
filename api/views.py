@@ -18,7 +18,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 import requests
 
-
+@csrf_exempt
 def validate_token(token):
     try:
         url = settings.SUPABASE_URL
@@ -41,7 +41,7 @@ def validate_token(token):
         raise Exception(f"Token validation failed: {str(e)}")
 
 
-
+@csrf_exempt
 def send_verification_email(user_email, token):
     endpoint = "verify"
     domain = settings.MAILGUN_DOMAIN
@@ -60,103 +60,104 @@ def send_verification_email(user_email, token):
         }
     )
 
+@csrf_exempt
+def signup(request):
+    url = settings.SUPABASE_URL
+    key = settings.SUPABASE_KEY
 
-class SignUpView(APIView):
-    def post(self, request):
-        url = settings.SUPABASE_URL
-        key = settings.SUPABASE_KEY
+    auth_url = f"{url}/auth/v1"
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
+    name = data.get('name')
 
-        auth_url = f"{url}/auth/v1"
-        data = request.data
-        email = data.get('email')
-        password = data.get('password')
-        name = data.get('name')
+    auth_response = requests.post(
+         f"{auth_url}/signup",
+        json={"email": email, "password": password},
+        headers={"apikey": key, "Content-Type": "application/json"}
+    )
 
+    if auth_response.status_code == 200:
+        user_data = auth_response.json()
+            
+        # Check the structure of user_data from Supabase response
+        if 'user' in user_data and 'id' in user_data['user']:
+            user_id = user_data['user']['id']
+        else:
+            return JsonResponse({"error": "User ID not found in response"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Insert user data into Users table
+        token = get_random_string(length=32)
+        send_verification_email(email, token)
+        supabase = create_client(url, key)
+        supabase.table('Users').insert({
+            'user_id': user_id,
+            'name': name,
+            'email': email, 
+            'token': str(token)
+        }).execute()
+
+        return JsonResponse({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+    else:
+        print(traceback.format_exc())
+        return JsonResponse(auth_response.json(), status=auth_response.status_code)
+
+
+@csrf_exempt
+def login(request):
+    # Fetching Supabase URL and Key from settings
+    url = settings.SUPABASE_URL
+    key = settings.SUPABASE_KEY
+    auth_url = f"{url}/auth/v1"
+
+    # Extract email and password from request data
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
+
+    # Supabase authentication request
+    try:
         auth_response = requests.post(
-            f"{auth_url}/signup",
+            f"{auth_url}/token?grant_type=password",
             json={"email": email, "password": password},
             headers={"apikey": key, "Content-Type": "application/json"}
         )
-
-        if auth_response.status_code == 200:
-            user_data = auth_response.json()
-            
-            # Check the structure of user_data from Supabase response
-            if 'user' in user_data and 'id' in user_data['user']:
-                user_id = user_data['user']['id']
-            else:
-                return JsonResponse({"error": "User ID not found in response"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Insert user data into Users table
-            token = get_random_string(length=32)
-            send_verification_email(email, token)
-            supabase = create_client(url, key)
-            supabase.table('Users').insert({
-                'user_id': user_id,
-                'name': name,
-                'email': email, 
-                'token': str(token)
-            }).execute()
-
-            return JsonResponse({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
-        else:
-            print(traceback.format_exc())
-            return JsonResponse(auth_response.json(), status=auth_response.status_code)
+        auth_response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Authentication request failed: {e}")
+        return JsonResponse({'error': 'Authentication request failed'}, status=500)
 
 
-class LoginView(APIView):
-    def post(self, request):
-        # Fetching Supabase URL and Key from settings
-        url = settings.SUPABASE_URL
-        key = settings.SUPABASE_KEY
-        auth_url = f"{url}/auth/v1"
-
-        # Extract email and password from request data
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        # Supabase authentication request
-        try:
-            auth_response = requests.post(
-                f"{auth_url}/token?grant_type=password",
-                json={"email": email, "password": password},
-                headers={"apikey": key, "Content-Type": "application/json"}
-            )
-            auth_response.raise_for_status()
-        except requests.RequestException as e:
-            print(f"Authentication request failed: {e}")
-            return JsonResponse({'error': 'Authentication request failed'}, status=500)
-
-
-        if auth_response.status_code == 200:
-            # Supabase client creation
-            supabase: Client = create_client(url, key)
-            
-            # Fetch user details from Supabase
-            user_response = supabase.table('Users').select('*').eq('email', email).execute()
-
-            if user_response.data:
-                user = user_response.data[0]
-
-                if user['status'] == 'verified':
-                    created_at = datetime.fromisoformat(user['created_at']).astimezone(timezone.utc)
-                    current_time = datetime.now(timezone.utc)
-                    
-                    if current_time < created_at + timedelta(days=14) or user['plan'] == 'paid':
-                        tokens = auth_response.json()
-                        return JsonResponse(tokens)
-                    else: 
-                        return JsonResponse({'pay': 'need payment'}, status=402)
-                else: 
-                    return JsonResponse({'verify': 'need verify'}, status=403)
-            else:
-                return JsonResponse({'error': 'User not found'}, status=404)
-        else:
-            # Log the authentication error details (for debugging purposes)
-            print(f"Auth error: {auth_response.json()}")
-            return JsonResponse(auth_response.json(), status=auth_response.status_code)
+    if auth_response.status_code == 200:
+        # Supabase client creation
+        supabase: Client = create_client(url, key)
         
+        # Fetch user details from Supabase
+        user_response = supabase.table('Users').select('*').eq('email', email).execute()
 
+        if user_response.data:
+            user = user_response.data[0]
+
+            if user['status'] == 'verified':
+                created_at = datetime.fromisoformat(user['created_at']).astimezone(timezone.utc)
+                current_time = datetime.now(timezone.utc)
+                
+                if current_time < created_at + timedelta(days=14) or user['plan'] == 'paid':
+                    tokens = auth_response.json()
+                    return JsonResponse(tokens)
+                else: 
+                    return JsonResponse({'pay': 'need payment'}, status=402)
+            else: 
+                return JsonResponse({'verify': 'need verify'}, status=403)
+        else:
+            return JsonResponse({'error': 'User not found'}, status=404)
+    else:
+        # Log the authentication error details (for debugging purposes)
+        print(f"Auth error: {auth_response.json()}")
+        return JsonResponse(auth_response.json(), status=auth_response.status_code)
+    
+        
+@csrf_exempt
 def verify(request, token):
     url = settings.SUPABASE_URL
     key = settings.SUPABASE_KEY

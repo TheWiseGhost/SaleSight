@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import SignUpView, LoginView, verify, data, delete_row, edit_feature, models, get_feature_values_and_models, main, get_prediction, find_features, store_model, insert_row, add_feature, delete_feature, get_feature_values, recent_data, recent_models, user_info, export_csv
+from .views import signup, login, verify, data, delete_row, edit_feature, models, get_feature_values_and_models, main, get_prediction, find_features, store_model, insert_row, add_feature, delete_feature, get_feature_values, recent_data, recent_models, user_info, export_csv
 
 urlpatterns = [
     path('', main),
-    path('sign_up/', SignUpView.as_view(), name='sign_up'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('sign_up/', signup, name='sign_up'),
+    path('login/', login, name='login'),
     path('verify/<str:token>/', verify),
     path('prediction/', get_prediction),
     path('features/', find_features),

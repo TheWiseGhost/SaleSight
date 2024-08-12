@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vg(v4yyimii&szidj@vhf4y1(1zi754@f)*q=d)ti2komdlda7'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -80,7 +80,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'https://salesight.netlify.app'
+]
 
 ROOT_URLCONF = 'salesight.urls'
 
@@ -167,4 +170,4 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
 MAILGUN_API = os.getenv('MAILGUN_API')
 
-ALLOWED_HOSTS = ['100.24.43.33', 'localhost', '127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['100.24.43.33', 'localhost', '127.0.0.1', '.vercel.app', 'salesightbackend.onrender.com']
