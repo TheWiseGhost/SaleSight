@@ -81,8 +81,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'https://salesight.netlify.app'
+    'http://localhost:3000/',
+    'https://salesight.netlify.app/',
 ]
 
 CORS_ALLOW_METHODS = [
