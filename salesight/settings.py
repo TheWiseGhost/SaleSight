@@ -170,4 +170,4 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
 MAILGUN_API = os.getenv('MAILGUN_API')
 
-ALLOWED_HOSTS = ['100.24.43.33', 'localhost', '127.0.0.1', '.vercel.app', 'salesightbackend.onrender.com']
+ALLOWED_HOSTS = ['salesightbackend.onrender.com']
