@@ -28,7 +28,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['salesightbackend.onrender.com']
+ALLOWED_HOSTS = ['salesightbackend.onrender.com', 'salesight.netlify.app']
+
 
 # Application definition
 
@@ -82,7 +83,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'https://salesight.netlify.app'
-]
+]   
 
 ROOT_URLCONF = 'salesight.urls'
 
