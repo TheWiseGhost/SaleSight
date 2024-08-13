@@ -28,8 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['salesightbackend.onrender.com']
 
 # Application definition
 
@@ -170,4 +169,4 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
 MAILGUN_API = os.getenv('MAILGUN_API')
 
-ALLOWED_HOSTS = ['salesightbackend.onrender.com']
+
