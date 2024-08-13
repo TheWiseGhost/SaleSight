@@ -54,6 +54,7 @@ djangorestframework-simplejwt = "^5.3.1"
 django-cleanup = "^8.1.0"
 pandas = "^2.2.2"
 supabase = "^2.6.0"
+django-cors-headers = "^4.4.0"
 
 
 [build-system]

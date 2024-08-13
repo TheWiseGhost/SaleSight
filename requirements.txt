@@ -209,6 +209,9 @@ distlib==0.3.8 ; python_version >= "3.11" and python_version < "4.0" \
 django-cleanup==8.1.0 ; python_version >= "3.11" and python_version < "4.0" \
     --hash=sha256:70df905076a44e7a111b31198199af633dee08876e199e6dce36ca8dd6b8b10f \
     --hash=sha256:7903873ea73b3f7e61e055340d27dba49b70634f60c87a573ad748e172836458
+django-cors-headers==4.4.0 ; python_version >= "3.11" and python_version < "4.0" \
+    --hash=sha256:5c6e3b7fe870876a1efdfeb4f433782c3524078fa0dc9e0195f6706ce7a242f6 \
+    --hash=sha256:92cf4633e22af67a230a1456cb1b7a02bb213d6536d2dcb2a4a24092ea9cebc2
 django==5.1 ; python_version >= "3.11" and python_version < "4.0" \
     --hash=sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d \
     --hash=sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557
