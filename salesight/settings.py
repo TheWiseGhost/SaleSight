@@ -34,10 +34,10 @@ ALLOWED_HOSTS = ['salesightbackend.onrender.com', 'salesight.netlify.app']
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'corsheaders',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'frontend.apps.FrontendConfig',
-    'django_cleanup.apps.CleanupConfig'
 ]
 
 
@@ -80,21 +79,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000/',
-    'https://salesight.netlify.app/',
-]
-
-CORS_ORIGIN_WHITELIST = ('http://localhost:3000/',
-    'https://salesight.netlify.app/',)
-
-CORS_ALLOW_METHODS = [
-'DELETE',
-'GET',
-'OPTIONS',
-'PATCH',
-'POST',
-'PUT',
+    'http://localhost:3000',
+    'https://salesight.netlify.app',
 ]
 
 ROOT_URLCONF = 'salesight.urls'
