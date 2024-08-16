@@ -93,7 +93,8 @@ def signup(request):
         supabase.table('Users').insert({
             'user_id': user_id,
             'name': name,
-            'email': email, 
+            'email': email,
+            'status': 'verified',
             'token': str(token)
         }).execute()
 
